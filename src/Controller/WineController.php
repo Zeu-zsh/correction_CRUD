@@ -33,23 +33,34 @@ final class WineController extends AbstractController
             $em->flush();
             // dump($wine);
         }
-        
+
         return $this->render('wine/new.html.twig', [
             'wine_form' => $form,
         ]);
     }
 
-    #[Route('/wine/edit', name: 'app_wine_edit')]
-    public function edit(): Response
+    #[Route('/wine/edit/{id}', name: 'app_wine_edit')]
+    public function edit(Wine $wine, Request $request, EntityManagerInterface $em): Response
     {
-        return $this->render('wine/edit.html.twig', [
-            'controller_name' => 'WineController',
+        // $wine = $wineRepository->find($id);
+        $form = $this->createForm(WineType::class, $wine);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            // dump($wine);
+            $em->persist($wine);
+            $em->flush();
+            // dump($wine);
+        }
+        return $this->render('wine/new.html.twig', [
+            'wine_form' => $form,
         ]);
     }
 
-    #[Route('/wine/delete', name: 'app_wine_delete')]
-    public function delete(): Response
+    #[Route('/wine/delete/{id}', name: 'app_wine_delete')]
+    public function delete(Wine $wine, EntityManagerInterface $em): Response
     {
+        $em->remove($wine);
+        $em->flush();
         return $this->redirectToRoute("app_wine_index");
     }
 }

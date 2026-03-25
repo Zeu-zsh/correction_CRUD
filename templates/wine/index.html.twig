@@ -14,6 +14,7 @@
     <ul>
         {% for wine in wines %}
         <li>{{wine.name}}</li>
+        <a role="button" href="{{url('app_wine_delete', {id:wine.id})}}">Delete</a>
         {% endfor %}
     </ul>
 </div>
