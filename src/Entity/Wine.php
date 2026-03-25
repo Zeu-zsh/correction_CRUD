@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\WineRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WineRepository::class)]
 class Wine
@@ -15,9 +17,14 @@ class Wine
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: new \DateTimeImmutable("1900-01-01"),
+        max: 'now'
+    )]
     private ?\DateTimeImmutable $year = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
